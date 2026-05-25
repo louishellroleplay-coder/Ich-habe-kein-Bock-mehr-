@@ -1,0 +1,1019 @@
+<!--
+LPP SAARBRÜCKEN SECURENET V6
+NEUER KOMPLETTCODE MIT:
+
+✓ Gruppenrechte
+✓ Admin Panel
+✓ Geschützte Akten
+✓ Ermittlungsgruppen
+✓ Benutzerverwaltung
+✓ Akten löschen
+✓ Dateien
+✓ Polizei Design
+
+ADMIN LOGIN:
+Benutzer: admin
+Passwort: LPP-saar-26
+-->
+
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>LPP SecureNet V6</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:Arial;
+background:#0a1016;
+color:white;
+}
+
+.login{
+width:400px;
+margin:120px auto;
+background:#151d27;
+padding:30px;
+border-radius:14px;
+}
+
+input,
+select,
+textarea,
+button{
+width:100%;
+padding:12px;
+margin-top:12px;
+border:none;
+border-radius:8px;
+}
+
+input,
+select,
+textarea{
+background:#26303c;
+color:white;
+}
+
+button{
+background:#0d6efd;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+.layout{
+display:none;
+}
+
+.sidebar{
+position:fixed;
+left:0;
+top:0;
+width:250px;
+height:100vh;
+background:#111820;
+padding:20px;
+border-right:2px solid #0d6efd;
+}
+
+.logo{
+font-size:24px;
+text-align:center;
+margin-bottom:30px;
+font-weight:bold;
+color:#0d6efd;
+}
+
+.menu button{
+margin-top:10px;
+background:#1e2733;
+}
+
+.content{
+margin-left:270px;
+padding:30px;
+}
+
+.page{
+display:none;
+}
+
+.active{
+display:block;
+}
+
+.card{
+background:#151d27;
+padding:25px;
+border-radius:14px;
+margin-bottom:20px;
+}
+
+.result{
+background:#0f151d;
+padding:20px;
+margin-top:20px;
+border-radius:10px;
+font-size:20px;
+text-align:center;
+font-weight:bold;
+color:#00ff88;
+}
+
+.file{
+background:#202a36;
+padding:15px;
+border-radius:10px;
+margin-top:10px;
+}
+
+.deleteBtn{
+background:#dc3545;
+}
+
+.copyBtn{
+background:#198754;
+}
+
+.small{
+margin-top:10px;
+color:#9ba7b4;
+}
+
+label{
+display:block;
+margin-top:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- LOGIN -->
+
+<div class="login"
+id="loginBox">
+
+<h1 style="text-align:center;
+color:#0d6efd;">
+
+LPP SecureNet
+
+</h1>
+
+<input type="text"
+id="username"
+placeholder="Benutzername">
+
+<input type="password"
+id="password"
+placeholder="Passwort">
+
+<button onclick="login()">
+Anmelden
+</button>
+
+</div>
+
+<!-- SYSTEM -->
+
+<div class="layout"
+id="layout">
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="logo">
+LPP NET
+</div>
+
+<div class="menu">
+
+<button onclick="showPage('dashboard')">
+Dashboard
+</button>
+
+<button onclick="showPage('newakte')">
+Neue Akte
+</button>
+
+<button onclick="showPage('aktenschrank')">
+Aktenschrank
+</button>
+
+<button onclick="showPage('ermittlungen')">
+Ermittlungen
+</button>
+
+<button id="adminMenu"
+style="display:none;"
+onclick="showPage('admin')">
+
+Administration
+
+</button>
+
+<button onclick="logout()">
+Logout
+</button>
+
+</div>
+
+</div>
+
+<!-- CONTENT -->
+
+<div class="content">
+
+<!-- DASHBOARD -->
+
+<div class="page active"
+id="dashboard">
+
+<div class="card">
+
+<h2>Dashboard</h2>
+
+<p>
+Internes Ermittlungsportal der
+Landespolizei Saarbrücken
+</p>
+
+<div id="roleBadge"
+class="small">
+Rolle
+</div>
+
+</div>
+
+</div>
+
+<!-- NEUE AKTE -->
+
+<div class="page"
+id="newakte">
+
+<div class="card">
+
+<h2>Neue Ermittlungsakte</h2>
+
+<select id="gruppe">
+
+<option value="kripo">
+Kripo
+</option>
+
+<option value="schutzpolizei">
+Schutzpolizei
+</option>
+
+<option value="autoposer">
+Autoposer
+</option>
+
+<option value="interneermittlung">
+Interne Ermittlung
+</option>
+
+<option value="leitung">
+Leitung
+</option>
+
+</select>
+
+<select id="gesetz">
+
+<option>STGB</option>
+<option>STPO</option>
+<option>BTMG</option>
+<option>WAFFG</option>
+<option>OWIG</option>
+<option>JGG</option>
+<option>BKAG</option>
+<option>BPOLG</option>
+<option>STVG</option>
+<option>STVO</option>
+
+</select>
+
+<input type="text"
+id="paragraph"
+placeholder="Paragraph">
+
+<input type="text"
+id="titel"
+placeholder="Vorgang">
+
+<button onclick="createAkte()">
+Akte erstellen
+</button>
+
+<div class="result"
+id="result">
+
+Keine Akte erstellt
+
+</div>
+
+<button class="copyBtn"
+onclick="copyAZ()">
+
+Aktenzeichen kopieren
+
+</button>
+
+</div>
+
+</div>
+
+<!-- AKTENSCHRANK -->
+
+<div class="page"
+id="aktenschrank">
+
+<div class="card">
+
+<h2>Aktenschrank</h2>
+
+<input type="text"
+id="searchAZ"
+placeholder="Aktenzeichen">
+
+<button onclick="openByAZ()">
+Akte öffnen
+</button>
+
+</div>
+
+<div class="card"
+id="akteBox"
+style="display:none;">
+
+<h2 id="akteTitle"></h2>
+
+<textarea id="akteText"
+placeholder="Ermittlungsnotizen">
+</textarea>
+
+<input type="file"
+id="akteFiles"
+multiple>
+
+<button onclick="saveAkte()">
+Akte speichern
+</button>
+
+<div id="fileList"></div>
+
+</div>
+
+</div>
+
+<!-- ERMITTLUNGEN -->
+
+<div class="page"
+id="ermittlungen">
+
+<div class="card">
+
+<h2>Ermittlungen</h2>
+
+<div id="ermittlungsListe"></div>
+
+</div>
+
+</div>
+
+<!-- ADMIN -->
+
+<div class="page"
+id="admin">
+
+<div class="card">
+
+<h2>Benutzer erstellen</h2>
+
+<input type="text"
+id="newUser"
+placeholder="Benutzername">
+
+<input type="password"
+id="newPass"
+placeholder="Passwort">
+
+<select id="newRole">
+
+<option>ermittler</option>
+<option>leitung</option>
+
+</select>
+
+<div class="small">
+Gruppenrechte
+</div>
+
+<label>
+<input type="checkbox"
+class="gruppenCheck"
+value="kripo">
+Kripo
+</label>
+
+<label>
+<input type="checkbox"
+class="gruppenCheck"
+value="schutzpolizei">
+Schutzpolizei
+</label>
+
+<label>
+<input type="checkbox"
+class="gruppenCheck"
+value="autoposer">
+Autoposer
+</label>
+
+<label>
+<input type="checkbox"
+class="gruppenCheck"
+value="interneermittlung">
+Interne Ermittlung
+</label>
+
+<label>
+<input type="checkbox"
+class="gruppenCheck"
+value="leitung">
+Leitung
+</label>
+
+<button onclick="createUser()">
+Benutzer erstellen
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Benutzerverwaltung</h2>
+
+<div id="userList"></div>
+
+</div>
+
+<div class="card">
+
+<h2>Akte löschen</h2>
+
+<input type="text"
+id="deleteAZ"
+placeholder="Aktenzeichen">
+
+<button class="deleteBtn"
+onclick="deleteAkte()">
+
+Akte löschen
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* =========================================
+   SYSTEM
+========================================= */
+
+let users =
+JSON.parse(localStorage.getItem("users")) || {
+
+admin:{
+password:"LPP-saar-26",
+role:"admin",
+gruppen:[
+"kripo",
+"schutzpolizei",
+"autoposer",
+"interneermittlung",
+"leitung"
+]
+}
+
+};
+
+let akten =
+JSON.parse(localStorage.getItem("akten")) || {};
+
+let currentUser = "";
+let currentRole = "";
+let currentAkte = "";
+
+/* =========================================
+   SAVE
+========================================= */
+
+function saveData(){
+
+localStorage.setItem(
+"users",
+JSON.stringify(users)
+);
+
+localStorage.setItem(
+"akten",
+JSON.stringify(akten)
+);
+
+}
+
+/* =========================================
+   LOGIN
+========================================= */
+
+function login(){
+
+let username =
+document.getElementById("username").value;
+
+let password =
+document.getElementById("password").value;
+
+if(
+users[username] &&
+users[username].password === password
+){
+
+currentUser = username;
+currentRole = users[username].role;
+
+document.getElementById("loginBox")
+.style.display = "none";
+
+document.getElementById("layout")
+.style.display = "block";
+
+document.getElementById("roleBadge")
+.innerHTML =
+`Angemeldet als: ${currentRole}`;
+
+if(currentRole === "admin"){
+
+document.getElementById("adminMenu")
+.style.display = "block";
+
+}
+
+loadUsers();
+loadErmittlungen();
+
+}else{
+
+alert("Ungültige Daten");
+
+}
+
+}
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+function logout(){
+
+location.reload();
+
+}
+
+/* =========================================
+   NAVIGATION
+========================================= */
+
+function showPage(page){
+
+document.querySelectorAll(".page")
+.forEach(p=>{
+
+p.classList.remove("active");
+
+});
+
+document.getElementById(page)
+.classList.add("active");
+
+}
+
+/* =========================================
+   AKTE ERSTELLEN
+========================================= */
+
+function createAkte(){
+
+let gesetz =
+document.getElementById("gesetz").value;
+
+let paragraph =
+document.getElementById("paragraph").value;
+
+let titel =
+document.getElementById("titel").value;
+
+let gruppe =
+document.getElementById("gruppe").value;
+
+let year =
+new Date().getFullYear()
+.toString()
+.slice(-2);
+
+let random =
+Math.floor(Math.random()*999999)
+.toString()
+.padStart(6,'0');
+
+let az =
+`LP-SBR-${gesetz}-${paragraph}-${year}-${random}`;
+
+akten[az] = {
+
+titel:titel,
+gruppe:gruppe,
+bearbeiter:currentUser,
+notiz:"",
+files:[],
+status:"Offen"
+
+};
+
+saveData();
+
+document.getElementById("result")
+.innerHTML = az;
+
+openAkte(az);
+
+loadErmittlungen();
+
+}
+
+/* =========================================
+   COPY
+========================================= */
+
+function copyAZ(){
+
+navigator.clipboard.writeText(
+document.getElementById("result")
+.innerText
+);
+
+alert("Kopiert");
+
+}
+
+/* =========================================
+   AKTEN LADEN
+========================================= */
+
+function loadErmittlungen(){
+
+let box =
+document.getElementById("ermittlungsListe");
+
+box.innerHTML = "";
+
+for(let az in akten){
+
+let akte = akten[az];
+
+if(currentRole !== "admin"){
+
+if(
+!users[currentUser]
+.gruppen
+.includes(akte.gruppe)
+){
+
+continue;
+
+}
+
+}
+
+box.innerHTML += `
+
+<div class="file">
+
+<b>${az}</b><br>
+
+${akte.titel}<br>
+
+Gruppe:
+${akte.gruppe}<br>
+
+Bearbeiter:
+${akte.bearbeiter}
+
+</div>
+
+`;
+
+}
+
+}
+
+/* =========================================
+   AKTE ÖFFNEN
+========================================= */
+
+function openByAZ(){
+
+let az =
+document.getElementById("searchAZ")
+.value;
+
+if(!akten[az]){
+
+alert("Akte nicht gefunden");
+return;
+
+}
+
+let akte = akten[az];
+
+if(currentRole !== "admin"){
+
+if(
+!users[currentUser]
+.gruppen
+.includes(akte.gruppe)
+){
+
+alert("Keine Berechtigung");
+return;
+
+}
+
+}
+
+openAkte(az);
+
+}
+
+function openAkte(az){
+
+currentAkte = az;
+
+let akte = akten[az];
+
+document.getElementById("akteBox")
+.style.display = "block";
+
+document.getElementById("akteTitle")
+.innerHTML = az;
+
+document.getElementById("akteText")
+.value = akte.notiz;
+
+renderFiles();
+
+}
+
+/* =========================================
+   SPEICHERN
+========================================= */
+
+function saveAkte(){
+
+let akte =
+akten[currentAkte];
+
+akte.notiz =
+document.getElementById("akteText")
+.value;
+
+let files =
+document.getElementById("akteFiles")
+.files;
+
+for(let file of files){
+
+akte.files.push(file.name);
+
+}
+
+saveData();
+
+renderFiles();
+
+alert("Gespeichert");
+
+}
+
+/* =========================================
+   DATEIEN
+========================================= */
+
+function renderFiles(){
+
+let akte =
+akten[currentAkte];
+
+let box =
+document.getElementById("fileList");
+
+box.innerHTML = "";
+
+akte.files.forEach(file=>{
+
+box.innerHTML += `
+
+<div class="file">
+
+📁 ${file}
+
+</div>
+
+`;
+
+});
+
+}
+
+/* =========================================
+   USER ERSTELLEN
+========================================= */
+
+function createUser(){
+
+if(currentRole !== "admin"){
+
+alert("Nur Admin");
+return;
+
+}
+
+let user =
+document.getElementById("newUser")
+.value;
+
+let pass =
+document.getElementById("newPass")
+.value;
+
+let role =
+document.getElementById("newRole")
+.value;
+
+let gruppen = [];
+
+document
+.querySelectorAll(".gruppenCheck:checked")
+.forEach(c=>{
+
+gruppen.push(c.value);
+
+});
+
+users[user] = {
+
+password:pass,
+role:role,
+gruppen:gruppen
+
+};
+
+saveData();
+
+loadUsers();
+
+alert("Benutzer erstellt");
+
+}
+
+/* =========================================
+   USER LISTE
+========================================= */
+
+function loadUsers(){
+
+let box =
+document.getElementById("userList");
+
+box.innerHTML = "";
+
+for(let user in users){
+
+box.innerHTML += `
+
+<div class="file">
+
+<b>${user}</b><br>
+
+Rolle:
+${users[user].role}
+
+<br><br>
+
+Gruppen:
+${users[user].gruppen.join(", ")}
+
+<br><br>
+
+<button class="deleteBtn"
+onclick="deleteUser('${user}')">
+
+Benutzer löschen
+
+</button>
+
+</div>
+
+`;
+
+}
+
+}
+
+/* =========================================
+   USER LÖSCHEN
+========================================= */
+
+function deleteUser(user){
+
+if(user === "admin"){
+
+alert("Admin geschützt");
+return;
+
+}
+
+delete users[user];
+
+saveData();
+
+loadUsers();
+
+}
+
+/* =========================================
+   AKTE LÖSCHEN
+========================================= */
+
+function deleteAkte(){
+
+if(currentRole !== "admin"){
+
+alert("Nur Admin");
+return;
+
+}
+
+let az =
+document.getElementById("deleteAZ")
+.value;
+
+if(akten[az]){
+
+delete akten[az];
+
+saveData();
+
+loadErmittlungen();
+
+alert("Akte gelöscht");
+
+}else{
+
+alert("Nicht gefunden");
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
